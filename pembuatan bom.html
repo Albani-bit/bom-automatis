@@ -1,0 +1,1986 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BOM Material Calculator</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#f3f4f6;
+    color:#111827;
+}
+
+/* SIDEBAR */
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    width:245px;
+    height:100vh;
+    background:#111827;
+    color:white;
+    padding:25px 18px;
+}
+
+.logo{
+    font-size:23px;
+    font-weight:bold;
+    margin-bottom:35px;
+}
+
+.logo span{
+    color:#60a5fa;
+}
+
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.menu button{
+    background:transparent;
+    border:none;
+    color:#d1d5db;
+    padding:13px;
+    text-align:left;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.menu button:hover{
+    background:#1f2937;
+    color:white;
+}
+
+/* MAIN */
+.main{
+    margin-left:245px;
+    padding:30px;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.header h1{
+    font-size:28px;
+}
+
+.header p{
+    color:#6b7280;
+    margin-top:6px;
+}
+
+/* CARD */
+.card{
+    background:white;
+    border-radius:12px;
+    padding:22px;
+    margin-bottom:20px;
+    box-shadow:0 2px 8px rgba(0,0,0,.05);
+}
+
+.card h2{
+    font-size:18px;
+    margin-bottom:18px;
+}
+
+/* FORM */
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:7px;
+}
+
+.form-group label{
+    font-size:13px;
+    font-weight:bold;
+    color:#374151;
+}
+
+input,
+select{
+    padding:11px;
+    border:1px solid #d1d5db;
+    border-radius:7px;
+    outline:none;
+}
+
+input:focus,
+select:focus{
+    border-color:#2563eb;
+}
+
+/* BUTTON */
+.btn{
+    border:none;
+    padding:11px 16px;
+    border-radius:7px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.btn-blue{
+    background:#2563eb;
+    color:white;
+}
+
+.btn-blue:hover{
+    background:#1d4ed8;
+}
+
+.btn-green{
+    background:#16a34a;
+    color:white;
+}
+
+.btn-orange{
+    background:#ea580c;
+    color:white;
+}
+
+.btn-red{
+    background:#dc2626;
+    color:white;
+}
+
+/* SUMMARY */
+.summary{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.summary-box{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.05);
+}
+
+.summary-box small{
+    color:#6b7280;
+}
+
+.summary-box h3{
+    margin-top:8px;
+    font-size:22px;
+}
+
+/* TABLE */
+.table-container{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:1500px;
+}
+
+th{
+    background:#111827;
+    color:white;
+    padding:12px;
+    text-align:left;
+    font-size:12px;
+}
+
+td{
+    padding:11px;
+    border-bottom:1px solid #e5e7eb;
+    font-size:13px;
+}
+
+.empty{
+    text-align:center;
+    color:#9ca3af;
+    padding:35px;
+}
+
+.delete{
+    background:#dc2626;
+    color:white;
+    border:none;
+    padding:7px 10px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+/* RESULT */
+.result-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.result-box{
+    background:#111827;
+    color:white;
+    border-radius:10px;
+    padding:20px;
+}
+
+.result-box small{
+    color:#9ca3af;
+}
+
+.result-box h2{
+    margin-top:8px;
+    color:white;
+}
+
+/* EXPORT */
+.export-area{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+
+    .form-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .summary{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .result-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:800px){
+
+    .sidebar{
+        width:70px;
+    }
+
+    .logo{
+        font-size:0;
+    }
+
+    .logo span{
+        font-size:18px;
+    }
+
+    .menu button{
+        font-size:0;
+        text-align:center;
+    }
+
+    .main{
+        margin-left:70px;
+    }
+}
+
+@media(max-width:600px){
+
+    .main{
+        padding:15px;
+    }
+
+    .form-grid,
+    .summary{
+        grid-template-columns:1fr;
+    }
+
+    .header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:15px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+        BOM<span>PRO</span>
+    </div>
+
+    <div class="menu">
+
+        <button onclick="scrollTopPage()">
+            📋 Material BOM
+        </button>
+
+        <button onclick="newBOM()">
+            📄 BOM Baru
+        </button>
+
+        <button onclick="exportCSV()">
+            📥 Export CSV
+        </button>
+
+        <button onclick="clearAll()">
+            🗑️ Hapus Semua
+        </button>
+
+    </div>
+
+</aside>
+
+
+<!-- MAIN -->
+
+<main class="main">
+
+    <div class="header">
+
+        <div>
+
+            <h1>
+                Material BOM Calculator
+            </h1>
+
+            <p>
+                Hitung kebutuhan material bersih dan kotor secara otomatis.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- INFORMASI PRODUK -->
+
+    <div class="card">
+
+        <h2>
+            📦 Informasi Produk
+        </h2>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>
+                    Nama Produk
+                </label>
+
+                <input
+                    id="productName"
+                    placeholder="Contoh: Cabinet Trolley">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Nomor BOM
+                </label>
+
+                <input
+                    id="bomNumber"
+                    placeholder="BOM-001">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Versi
+                </label>
+
+                <input
+                    id="version"
+                    placeholder="V1.0">
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- MATERIAL -->
+
+    <div class="card">
+
+        <h2>
+            🧱 Data Material
+        </h2>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>
+                    Nama Material
+                </label>
+
+                <input
+                    id="material"
+                    placeholder="Plywood">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Tebal Material (mm)
+                </label>
+
+                <input
+                    id="thickness"
+                    type="number"
+                    placeholder="18">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Panjang Lembar Material (mm)
+                </label>
+
+                <input
+                    id="sheetLength"
+                    type="number"
+                    placeholder="2440">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Lebar Lembar Material (mm)
+                </label>
+
+                <input
+                    id="sheetWidth"
+                    type="number"
+                    placeholder="1220">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Harga / Lembar (Rp)
+                </label>
+
+                <input
+                    id="sheetPrice"
+                    type="number"
+                    placeholder="450000">
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ALLOWANCE -->
+
+    <div class="card">
+
+        <h2>
+            📐 Pengaturan Allowance Produksi
+        </h2>
+
+        <p style="color:#6b7280;margin-bottom:18px;font-size:14px;">
+            Tambahan ukuran untuk proses pemotongan, trimming, atau pengerjaan produksi.
+        </p>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>
+                    Allowance Panjang (mm)
+                </label>
+
+                <input
+                    id="allowLength"
+                    type="number"
+                    value="10"
+                    min="0">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Allowance Lebar (mm)
+                </label>
+
+                <input
+                    id="allowWidth"
+                    type="number"
+                    value="10"
+                    min="0">
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- KOMPONEN -->
+
+    <div class="card">
+
+        <h2>
+            🔨 Tambah Komponen Produk
+        </h2>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>
+                    Nama Komponen
+                </label>
+
+                <input
+                    id="component"
+                    placeholder="Top Table">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Panjang Bersih (mm)
+                </label>
+
+                <input
+                    id="cleanLength"
+                    type="number"
+                    placeholder="1500">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Lebar Bersih (mm)
+                </label>
+
+                <input
+                    id="cleanWidth"
+                    type="number"
+                    placeholder="800">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Tebal Bersih (mm)
+                </label>
+
+                <input
+                    id="cleanThickness"
+                    type="number"
+                    placeholder="18">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Jumlah Komponen
+                </label>
+
+                <input
+                    id="quantity"
+                    type="number"
+                    value="1"
+                    min="1">
+
+            </div>
+
+        </div>
+
+        <br>
+
+        <button
+            class="btn btn-blue"
+            onclick="addComponent()">
+
+            ➕ Tambahkan Komponen
+
+        </button>
+
+    </div>
+
+
+    <!-- SUMMARY -->
+
+    <div class="summary">
+
+        <div class="summary-box">
+
+            <small>
+                Total Komponen
+            </small>
+
+            <h3 id="totalComponents">
+                0
+            </h3>
+
+        </div>
+
+
+        <div class="summary-box">
+
+            <small>
+                Total Luas Bersih
+            </small>
+
+            <h3 id="totalCleanArea">
+                0 m²
+            </h3>
+
+        </div>
+
+
+        <div class="summary-box">
+
+            <small>
+                Total Luas Kotor
+            </small>
+
+            <h3 id="totalGrossArea">
+                0 m²
+            </h3>
+
+        </div>
+
+
+        <div class="summary-box">
+
+            <small>
+                Kebutuhan Material
+            </small>
+
+            <h3 id="totalSheets">
+                0 lembar
+            </h3>
+
+        </div>
+
+    </div>
+
+
+    <!-- TABLE -->
+
+    <div class="card">
+
+        <h2>
+            📋 Detail Material Requirement
+        </h2>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>No</th>
+
+                        <th>Komponen</th>
+
+                        <th>Material</th>
+
+                        <th>Ukuran Bersih</th>
+
+                        <th>Ukuran Kotor</th>
+
+                        <th>Qty</th>
+
+                        <th>Luas Bersih</th>
+
+                        <th>Luas Kotor</th>
+
+                        <th>Kebutuhan Lembar</th>
+
+                        <th>Waste</th>
+
+                        <th>Biaya Material</th>
+
+                        <th>Aksi</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="bomTable">
+
+                    <tr>
+
+                        <td
+                            colspan="12"
+                            class="empty">
+
+                            Belum ada komponen.
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- HASIL -->
+
+    <div class="card">
+
+        <h2>
+            📊 Hasil Kebutuhan Material
+        </h2>
+
+        <div class="result-grid">
+
+            <div class="result-box">
+
+                <small>
+                    Total Kebutuhan Bersih
+                </small>
+
+                <h2 id="resultClean">
+                    0 m²
+                </h2>
+
+            </div>
+
+
+            <div class="result-box">
+
+                <small>
+                    Total Kebutuhan Kotor
+                </small>
+
+                <h2 id="resultGross">
+                    0 m²
+                </h2>
+
+            </div>
+
+
+            <div class="result-box">
+
+                <small>
+                    Kebutuhan Pembelian
+                </small>
+
+                <h2 id="resultSheets">
+                    0 lembar
+                </h2>
+
+            </div>
+
+
+            <div class="result-box">
+
+                <small>
+                    Total Waste
+                </small>
+
+                <h2 id="resultWaste">
+                    0 m²
+                </h2>
+
+            </div>
+
+
+            <div class="result-box">
+
+                <small>
+                    Estimasi Biaya Material
+                </small>
+
+                <h2 id="resultCost">
+                    Rp 0
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- EXPORT -->
+
+    <div class="card">
+
+        <h2>
+            📥 Export BOM
+        </h2>
+
+        <div class="export-area">
+
+            <button
+                class="btn btn-green"
+                onclick="exportCSV()">
+
+                📊 Export Excel / CSV
+
+            </button>
+
+
+            <button
+                class="btn btn-orange"
+                onclick="window.print()">
+
+                🖨️ Print / Save PDF
+
+            </button>
+
+
+            <button
+                class="btn btn-red"
+                onclick="clearAll()">
+
+                🗑️ Hapus Semua
+
+            </button>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+/* =========================================
+   DATA
+========================================= */
+
+let components =
+JSON.parse(
+    localStorage.getItem(
+        "materialBOM"
+    )
+) || [];
+
+
+/* =========================================
+   FORMAT RUPIAH
+========================================= */
+
+function rupiah(number){
+
+    return new Intl.NumberFormat(
+        "id-ID",
+        {
+            style:"currency",
+            currency:"IDR",
+            maximumFractionDigits:0
+        }
+    ).format(number);
+
+}
+
+
+/* =========================================
+   FORMAT ANGKA
+========================================= */
+
+function numberFormat(number){
+
+    return new Intl.NumberFormat(
+        "id-ID",
+        {
+            maximumFractionDigits:3
+        }
+    ).format(number);
+
+}
+
+
+/* =========================================
+   TAMBAH KOMPONEN
+========================================= */
+
+function addComponent(){
+
+    const component =
+        document
+        .getElementById(
+            "component"
+        )
+        .value
+        .trim();
+
+
+    const cleanLength =
+        Number(
+            document
+            .getElementById(
+                "cleanLength"
+            )
+            .value
+        );
+
+
+    const cleanWidth =
+        Number(
+            document
+            .getElementById(
+                "cleanWidth"
+            )
+            .value
+        );
+
+
+    const cleanThickness =
+        Number(
+            document
+            .getElementById(
+                "cleanThickness"
+            )
+            .value
+        );
+
+
+    const quantity =
+        Number(
+            document
+            .getElementById(
+                "quantity"
+            )
+            .value
+        );
+
+
+    if(
+        !component ||
+        cleanLength <= 0 ||
+        cleanWidth <= 0 ||
+        cleanThickness <= 0 ||
+        quantity <= 0
+    ){
+
+        alert(
+            "Lengkapi data komponen terlebih dahulu."
+        );
+
+        return;
+
+    }
+
+
+    components.push({
+
+        id:Date.now(),
+
+        component:component,
+
+        cleanLength:cleanLength,
+
+        cleanWidth:cleanWidth,
+
+        cleanThickness:cleanThickness,
+
+        quantity:quantity
+
+    });
+
+
+    save();
+
+    render();
+
+    clearComponentForm();
+
+}
+
+
+/* =========================================
+   RENDER
+========================================= */
+
+function render(){
+
+    const table =
+        document.getElementById(
+            "bomTable"
+        );
+
+
+    table.innerHTML="";
+
+
+    if(
+        components.length === 0
+    ){
+
+        table.innerHTML=`
+
+            <tr>
+
+                <td
+                    colspan="12"
+                    class="empty">
+
+                    Belum ada komponen.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        calculate();
+
+        return;
+
+    }
+
+
+    const material =
+        document.getElementById(
+            "material"
+        ).value ||
+        "Plywood";
+
+
+    const allowLength =
+        Number(
+            document.getElementById(
+                "allowLength"
+            ).value
+        ) || 0;
+
+
+    const allowWidth =
+        Number(
+            document.getElementById(
+                "allowWidth"
+            ).value
+        ) || 0;
+
+
+    const sheetLength =
+        Number(
+            document.getElementById(
+                "sheetLength"
+            ).value
+        ) || 0;
+
+
+    const sheetWidth =
+        Number(
+            document.getElementById(
+                "sheetWidth"
+            ).value
+        ) || 0;
+
+
+    const sheetArea =
+        (
+            sheetLength *
+            sheetWidth
+        ) / 1000000;
+
+
+    const sheetPrice =
+        Number(
+            document.getElementById(
+                "sheetPrice"
+            ).value
+        ) || 0;
+
+
+    components.forEach(
+        (item,index)=>{
+
+            /* =========================
+               UKURAN KOTOR
+            ========================= */
+
+            const grossLength =
+                item.cleanLength +
+                allowLength;
+
+
+            const grossWidth =
+                item.cleanWidth +
+                allowWidth;
+
+
+            /* =========================
+               LUAS BERSIH
+            ========================= */
+
+            const cleanAreaSingle =
+                (
+                    item.cleanLength *
+                    item.cleanWidth
+                ) / 1000000;
+
+
+            const cleanArea =
+                cleanAreaSingle *
+                item.quantity;
+
+
+            /* =========================
+               LUAS KOTOR
+            ========================= */
+
+            const grossAreaSingle =
+                (
+                    grossLength *
+                    grossWidth
+                ) / 1000000;
+
+
+            const grossArea =
+                grossAreaSingle *
+                item.quantity;
+
+
+            /* =========================
+               KEBUTUHAN LEMBAR
+            ========================= */
+
+            let sheets=0;
+
+
+            if(sheetArea > 0){
+
+                sheets =
+                    Math.ceil(
+                        grossArea /
+                        sheetArea
+                    );
+
+            }
+
+
+            /* =========================
+               WASTE
+            ========================= */
+
+            let waste=0;
+
+            if(sheetArea > 0){
+
+                waste =
+                    (
+                        sheets *
+                        sheetArea
+                    ) -
+                    cleanArea;
+
+            }
+
+
+            /* =========================
+               BIAYA
+            ========================= */
+
+            const cost =
+                sheets *
+                sheetPrice;
+
+
+            table.innerHTML += `
+
+                <tr>
+
+                    <td>
+                        ${index+1}
+                    </td>
+
+                    <td>
+                        <strong>
+                            ${item.component}
+                        </strong>
+                    </td>
+
+                    <td>
+                        ${material}
+                    </td>
+
+                    <td>
+                        ${item.cleanLength}
+                        ×
+                        ${item.cleanWidth}
+                        ×
+                        ${item.cleanThickness}
+                        mm
+                    </td>
+
+                    <td>
+                        ${grossLength}
+                        ×
+                        ${grossWidth}
+                        ×
+                        ${item.cleanThickness}
+                        mm
+                    </td>
+
+                    <td>
+                        ${item.quantity}
+                    </td>
+
+                    <td>
+                        ${numberFormat(
+                            cleanArea
+                        )}
+                        m²
+                    </td>
+
+                    <td>
+                        ${numberFormat(
+                            grossArea
+                        )}
+                        m²
+                    </td>
+
+                    <td>
+                        <strong>
+                            ${sheets}
+                        </strong>
+                        lembar
+                    </td>
+
+                    <td>
+                        ${numberFormat(
+                            waste
+                        )}
+                        m²
+                    </td>
+
+                    <td>
+                        ${rupiah(
+                            cost
+                        )}
+                    </td>
+
+                    <td>
+
+                        <button
+                            class="delete"
+                            onclick="
+                            deleteComponent(
+                                ${item.id}
+                            )">
+
+                            Hapus
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+    );
+
+
+    calculate();
+
+}
+
+
+/* =========================================
+   CALCULATE
+========================================= */
+
+function calculate(){
+
+    const allowLength =
+        Number(
+            document.getElementById(
+                "allowLength"
+            ).value
+        ) || 0;
+
+
+    const allowWidth =
+        Number(
+            document.getElementById(
+                "allowWidth"
+            ).value
+        ) || 0;
+
+
+    const sheetLength =
+        Number(
+            document.getElementById(
+                "sheetLength"
+            ).value
+        ) || 0;
+
+
+    const sheetWidth =
+        Number(
+            document.getElementById(
+                "sheetWidth"
+            ).value
+        ) || 0;
+
+
+    const sheetPrice =
+        Number(
+            document.getElementById(
+                "sheetPrice"
+            ).value
+        ) || 0;
+
+
+    const sheetArea =
+        (
+            sheetLength *
+            sheetWidth
+        ) / 1000000;
+
+
+    let cleanTotal=0;
+
+    let grossTotal=0;
+
+    let totalSheets=0;
+
+    let totalWaste=0;
+
+
+    components.forEach(
+        item=>{
+
+            const grossLength =
+                item.cleanLength +
+                allowLength;
+
+
+            const grossWidth =
+                item.cleanWidth +
+                allowWidth;
+
+
+            const cleanArea =
+                (
+                    item.cleanLength *
+                    item.cleanWidth
+                ) /
+                1000000 *
+                item.quantity;
+
+
+            const grossArea =
+                (
+                    grossLength *
+                    grossWidth
+                ) /
+                1000000 *
+                item.quantity;
+
+
+            let sheets=0;
+
+            if(sheetArea > 0){
+
+                sheets =
+                    Math.ceil(
+                        grossArea /
+                        sheetArea
+                    );
+
+            }
+
+
+            const waste =
+                (
+                    sheets *
+                    sheetArea
+                ) -
+                cleanArea;
+
+
+            cleanTotal += cleanArea;
+
+            grossTotal += grossArea;
+
+            totalSheets += sheets;
+
+            totalWaste +=
+                Math.max(
+                    waste,
+                    0
+                );
+
+        }
+    );
+
+
+    const totalCost =
+        totalSheets *
+        sheetPrice;
+
+
+    /* =========================
+       SUMMARY
+    ========================= */
+
+    document.getElementById(
+        "totalComponents"
+    ).textContent =
+        components.length;
+
+
+    document.getElementById(
+        "totalCleanArea"
+    ).textContent =
+        numberFormat(
+            cleanTotal
+        ) +
+        " m²";
+
+
+    document.getElementById(
+        "totalGrossArea"
+    ).textContent =
+        numberFormat(
+            grossTotal
+        ) +
+        " m²";
+
+
+    document.getElementById(
+        "totalSheets"
+    ).textContent =
+        totalSheets +
+        " lembar";
+
+
+    /* =========================
+       RESULT
+    ========================= */
+
+    document.getElementById(
+        "resultClean"
+    ).textContent =
+        numberFormat(
+            cleanTotal
+        ) +
+        " m²";
+
+
+    document.getElementById(
+        "resultGross"
+    ).textContent =
+        numberFormat(
+            grossTotal
+        ) +
+        " m²";
+
+
+    document.getElementById(
+        "resultSheets"
+    ).textContent =
+        totalSheets +
+        " lembar";
+
+
+    document.getElementById(
+        "resultWaste"
+    ).textContent =
+        numberFormat(
+            totalWaste
+        ) +
+        " m²";
+
+
+    document.getElementById(
+        "resultCost"
+    ).textContent =
+        rupiah(
+            totalCost
+        );
+
+}
+
+
+/* =========================================
+   DELETE
+========================================= */
+
+function deleteComponent(id){
+
+    components =
+        components.filter(
+            item =>
+            item.id !== id
+        );
+
+    save();
+
+    render();
+
+}
+
+
+/* =========================================
+   SAVE
+========================================= */
+
+function save(){
+
+    localStorage.setItem(
+        "materialBOM",
+        JSON.stringify(
+            components
+        )
+    );
+
+}
+
+
+/* =========================================
+   CLEAR FORM
+========================================= */
+
+function clearComponentForm(){
+
+    document.getElementById(
+        "component"
+    ).value="";
+
+
+    document.getElementById(
+        "cleanLength"
+    ).value="";
+
+
+    document.getElementById(
+        "cleanWidth"
+    ).value="";
+
+
+    document.getElementById(
+        "cleanThickness"
+    ).value="";
+
+
+    document.getElementById(
+        "quantity"
+    ).value=1;
+
+}
+
+
+/* =========================================
+   BOM BARU
+========================================= */
+
+function newBOM(){
+
+    if(
+        confirm(
+            "Buat BOM baru? Semua komponen akan dihapus."
+        )
+    ){
+
+        components=[];
+
+        save();
+
+        render();
+
+    }
+
+}
+
+
+/* =========================================
+   CLEAR
+========================================= */
+
+function clearAll(){
+
+    if(
+        confirm(
+            "Yakin ingin menghapus semua data?"
+        )
+    ){
+
+        components=[];
+
+        save();
+
+        render();
+
+    }
+
+}
+
+
+/* =========================================
+   EXPORT CSV
+========================================= */
+
+function exportCSV(){
+
+    if(
+        components.length === 0
+    ){
+
+        alert(
+            "Belum ada data komponen."
+        );
+
+        return;
+
+    }
+
+
+    const product =
+        document.getElementById(
+            "productName"
+        ).value ||
+        "Produk";
+
+
+    const material =
+        document.getElementById(
+            "material"
+        ).value ||
+        "Material";
+
+
+    const allowLength =
+        Number(
+            document.getElementById(
+                "allowLength"
+            ).value
+        ) || 0;
+
+
+    const allowWidth =
+        Number(
+            document.getElementById(
+                "allowWidth"
+            ).value
+        ) || 0;
+
+
+    const sheetLength =
+        Number(
+            document.getElementById(
+                "sheetLength"
+            ).value
+        ) || 0;
+
+
+    const sheetWidth =
+        Number(
+            document.getElementById(
+                "sheetWidth"
+            ).value
+        ) || 0;
+
+
+    const sheetPrice =
+        Number(
+            document.getElementById(
+                "sheetPrice"
+            ).value
+        ) || 0;
+
+
+    const sheetArea =
+        (
+            sheetLength *
+            sheetWidth
+        ) / 1000000;
+
+
+    let csv =
+        "MATERIAL BOM CALCULATOR\n";
+
+
+    csv +=
+        `Nama Produk,${product}\n`;
+
+
+    csv +=
+        `Material,${material}\n`;
+
+
+    csv +=
+        `Ukuran Lembar,${sheetLength} x ${sheetWidth} mm\n`;
+
+
+    csv +=
+        `Allowance Panjang,${allowLength} mm\n`;
+
+
+    csv +=
+        `Allowance Lebar,${allowWidth} mm\n\n`;
+
+
+    csv +=
+        "No,Komponen,Material,Ukuran Bersih,Ukuran Kotor,Qty,Luas Bersih (m2),Luas Kotor (m2),Kebutuhan Lembar,Waste (m2),Biaya\n";
+
+
+    let totalClean=0;
+
+    let totalGross=0;
+
+    let totalSheets=0;
+
+    let totalWaste=0;
+
+
+    components.forEach(
+        (item,index)=>{
+
+            const grossLength =
+                item.cleanLength +
+                allowLength;
+
+
+            const grossWidth =
+                item.cleanWidth +
+                allowWidth;
+
+
+            const cleanArea =
+                (
+                    item.cleanLength *
+                    item.cleanWidth
+                ) /
+                1000000 *
+                item.quantity;
+
+
+            const grossArea =
+                (
+                    grossLength *
+                    grossWidth
+                ) /
+                1000000 *
+                item.quantity;
+
+
+            const sheets =
+                sheetArea > 0
+                ?
+                Math.ceil(
+                    grossArea /
+                    sheetArea
+                )
+                :
+                0;
+
+
+            const waste =
+                Math.max(
+                    (
+                        sheets *
+                        sheetArea
+                    ) -
+                    cleanArea,
+                    0
+                );
+
+
+            const cost =
+                sheets *
+                sheetPrice;
+
+
+            totalClean += cleanArea;
+
+            totalGross += grossArea;
+
+            totalSheets += sheets;
+
+            totalWaste += waste;
+
+
+            csv +=
+
+                `${index+1},` +
+
+                `"${item.component}",` +
+
+                `"${material}",` +
+
+                `"${item.cleanLength} x ${item.cleanWidth} x ${item.cleanThickness} mm",` +
+
+                `"${grossLength} x ${grossWidth} x ${item.cleanThickness} mm",` +
+
+                `${item.quantity},` +
+
+                `${cleanArea.toFixed(3)},` +
+
+                `${grossArea.toFixed(3)},` +
+
+                `${sheets},` +
+
+                `${waste.toFixed(3)},` +
+
+                `${cost}\n`;
+
+        }
+    );
+
+
+    csv += "\n";
+
+    csv +=
+        `TOTAL LUAS BERSIH,,,,,${totalClean.toFixed(3)} m2\n`;
+
+    csv +=
+        `TOTAL LUAS KOTOR,,,,,${totalGross.toFixed(3)} m2\n`;
+
+    csv +=
+        `TOTAL KEBUTUHAN LEMBAR,,,,,${totalSheets} lembar\n`;
+
+    csv +=
+        `TOTAL WASTE,,,,,${totalWaste.toFixed(3)} m2\n`;
+
+    csv +=
+        `TOTAL BIAYA MATERIAL,,,,,${totalSheets * sheetPrice}\n`;
+
+
+    const blob =
+        new Blob(
+            [csv],
+            {
+                type:
+                "text/csv;charset=utf-8;"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(
+            blob
+        );
+
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    link.href=url;
+
+    link.download =
+        `${product}_Material_BOM.csv`;
+
+
+    link.click();
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+}
+
+
+/* =========================================
+   SCROLL
+========================================= */
+
+function scrollTopPage(){
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =========================================
+   AUTO UPDATE
+========================================= */
+
+document
+.querySelectorAll(
+    "input, select"
+)
+.forEach(
+    element=>{
+
+        element.addEventListener(
+            "input",
+            render
+        );
+
+        element.addEventListener(
+            "change",
+            render
+        );
+
+    }
+);
+
+
+/* =========================================
+   START
+========================================= */
+
+render();
+
+</script>
+
+</body>
+</html>
